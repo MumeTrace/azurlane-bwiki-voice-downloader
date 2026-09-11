@@ -1,0 +1,8 @@
+* text=auto eol=lf
+
+# Raw BWiki snapshots must remain byte-faithful; their upstream whitespace is data.
+tests/fixtures/*.html text eol=lf -whitespace
+
+# Keep ordinary whitespace checks, but tolerate an extra blank line at EOF.
+*.py text eol=lf whitespace=-blank-at-eof
+*.toml text eol=lf whitespace=-blank-at-eof

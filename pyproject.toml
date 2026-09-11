@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "azurlane-bwiki-voice-downloader"
+version = "1.0.0"
+description = "碧蓝航线 BWiki 舰船语音批量下载与结构化归档工具"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "beautifulsoup4>=4.12,<5",
+  "httpx>=0.27,<1",
+  "lxml>=5,<7",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.setuptools]
+packages = ["bwiki", "downloader", "storage", "utils"]
+
