@@ -66,6 +66,7 @@ def test_oath_skin_does_not_need_description_category() -> None:
     [
         ("javelin.html", "标枪", "标枪", 10),
         ("admiral_zenker.html", "曾克海军上将", "泽特", 2),
+        ("hatsuzuki.html", "初月", "檚", 4),
     ],
 )
 def test_additional_real_pages(
@@ -85,6 +86,17 @@ def test_javelin_has_missing_audio_inside_a_skin() -> None:
         for voice_set in ship.skin_voice_sets
         for voice in voice_set.voices
     )
+
+
+def test_hatsuzuki_ignores_empty_optional_ship_type_row() -> None:
+    ship = load_ship("hatsuzuki.html")
+    voices = [voice for voice_set in ship.voice_sets for voice in voice_set.voices]
+
+    assert ship.name == "初月"
+    assert ship.display_name == "檚"
+    assert len(ship.base_voice_set.voices) == 46
+    assert len(voices) == 82
+    assert all(voice.category != "舰船型号" for voice in voices)
 
 
 def test_missing_voice_section_fails_instead_of_guessing() -> None:

@@ -47,16 +47,33 @@ def rendered_text(node: Tag) -> str:
     return text.strip()
 
 
+def _is_empty_optional_row(row: Tag) -> bool:
+    """Return whether a row has category metadata but no payload to archive."""
+
+    data_cells = row.find_all("td", recursive=False)
+    if not data_cells:
+        return False
+    return all(
+        not rendered_text(cell)
+        and cell.select_one(".ship_word_block, [href], [src]") is None
+        for cell in data_cells
+    )
+
+
 def parse_voice_table(table: Tag, page_url: str) -> tuple[VoiceLine, ...]:
     voices: list[VoiceLine] = []
 
     for row in table.find_all("tr"):
+        if row.find_parent("table") is not table:
+            continue
         category_cell = row.find("th", recursive=False)
         if category_cell is None:
             raise VoiceTableParseError("语音表中存在没有直接 th 类别单元的行")
         category = rendered_text(category_cell)
         blocks = row.select(VOICE_BLOCK_SELECTOR)
         if not blocks:
+            if _is_empty_optional_row(row):
+                continue
             raise VoiceTableParseError(f"类别“{category}”中没有 ship_word_block")
 
         for ordinal, block in enumerate(blocks, start=1):
@@ -86,5 +103,6 @@ def parse_voice_table(table: Tag, page_url: str) -> tuple[VoiceLine, ...]:
                 )
             )
 
+    if not voices:
+        raise VoiceTableParseError("语音表中没有可解析的 ship_word_block")
     return tuple(voices)
-

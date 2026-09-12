@@ -16,11 +16,13 @@ from typing import Iterable
 import httpx
 from bs4 import BeautifulSoup, Tag
 
+from utils.console import configure_console_output
+
 
 DEFAULT_URL = "https://wiki.biligame.com/blhx/%E6%AC%A7%E6%A0%B9%E4%BA%B2%E7%8E%8B"
 USER_AGENT = (
-    "azurlane-bwiki-voice-downloader/0.1 "
-    "(Phase 1 DOM research; local archival tool)"
+    "azurlane-bwiki-voice-downloader/3.0 "
+    "(DOM inspector; local archival tool)"
 )
 
 
@@ -129,11 +131,24 @@ def extract_text(line: Tag) -> str:
     return "".join(line.strings).strip()
 
 
+def is_empty_optional_row(row: Tag) -> bool:
+    data_cells = row.find_all("td", recursive=False)
+    if not data_cells:
+        return False
+    return all(
+        not extract_text(cell)
+        and cell.select_one(".ship_word_block, [href], [src]") is None
+        for cell in data_cells
+    )
+
+
 def inspect_table(name: str, target: str | None, table: Tag) -> VoiceSetEvidence:
     rows = table.find_all("tr")
     voices: list[VoiceBlockEvidence] = []
 
     for row in rows:
+        if row.find_parent("table") is not table:
+            continue
         category_cell = row.find("th", recursive=False)
         if category_cell is None:
             raise DomInspectionError(f"{name} 中存在没有直接 th 类别单元的行")
@@ -141,6 +156,8 @@ def inspect_table(name: str, target: str | None, table: Tag) -> VoiceSetEvidence
 
         blocks = row.select(".ship_word_block")
         if not blocks:
+            if is_empty_optional_row(row):
+                continue
             raise DomInspectionError(f"{name}/{category} 中没有 ship_word_block")
 
         for block in blocks:
@@ -166,6 +183,8 @@ def inspect_table(name: str, target: str | None, table: Tag) -> VoiceSetEvidence
                 )
             )
 
+    if not voices:
+        raise DomInspectionError(f"{name} 中没有可解析的 ship_word_block")
     return VoiceSetEvidence(
         name=name,
         target=target,
@@ -261,6 +280,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
+    configure_console_output()
     args = parse_args()
     if args.html is not None:
         html = args.html.read_text(encoding="utf-8")
@@ -278,4 +298,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

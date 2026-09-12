@@ -211,6 +211,8 @@ D:\anaconda3\python.exe inspect_bwiki_dom.py --save-fixture tests\fixtures\new-p
 
 不要通过全局抓取或按纯文本顺序配对来绕过错误。应比较 [架构文档中的 DOM 合同](ARCHITECTURE.md#5-dom-解析合同) 后更新 selector 和测试。
 
+程序允许语音表中出现数据单元格完全为空的可选模板行；例如初月页面的空“舰船型号”行不会被当成语音，也不会阻止后续台词下载。非空的未知结构仍会记录为解析失败，避免台词与 MP3 错配。
+
 ### 有 MP3，但程序仍重新下载
 
 常见原因是文件为 0 字节、下载到错误页、没有可识别的 MP3 头，或 metadata 中源 URL 已改变。检查 `logs/app.log` 和对应 metadata 条目。

@@ -14,6 +14,7 @@ from downloader.audio import AudioDownloader
 from downloader.manager import DownloadManager, DownloadSummary
 from storage.paths import StorageLayout
 from storage.state import FailedStore, TaskStateStore
+from utils.console import configure_console_output
 from utils.logger import Reporter, configure_logging
 
 
@@ -276,6 +277,7 @@ async def async_main() -> None:
 
 
 def main() -> int:
+    configure_console_output()
     try:
         asyncio.run(async_main())
     except KeyboardInterrupt:
