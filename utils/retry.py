@@ -6,7 +6,7 @@ from email.utils import parsedate_to_datetime
 from datetime import datetime, timezone
 
 
-RETRYABLE_HTTP_STATUS = frozenset({429, 500, 502, 503, 504})
+RETRYABLE_HTTP_STATUS = frozenset({429, 500, 502, 503, 504, 567})
 
 
 def exponential_delay(attempt: int, base: float = 1.0, maximum: float = 30.0) -> float:
@@ -29,4 +29,3 @@ def retry_after_seconds(value: str | None) -> float | None:
         return max(0.0, (when - datetime.now(timezone.utc)).total_seconds())
     except (TypeError, ValueError, OverflowError):
         return None
-

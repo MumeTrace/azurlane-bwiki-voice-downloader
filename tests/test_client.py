@@ -7,7 +7,8 @@ import bwiki.client as client_module
 from bwiki.client import BWikiClient, BWikiRequestError
 
 
-def test_retryable_page_status_uses_bounded_retry(monkeypatch) -> None:
+@pytest.mark.parametrize("status_code", [503, 567])
+def test_retryable_page_status_uses_bounded_retry(monkeypatch, status_code) -> None:
     attempts = 0
     delays: list[float] = []
 
@@ -15,7 +16,7 @@ def test_retryable_page_status_uses_bounded_retry(monkeypatch) -> None:
         nonlocal attempts
         attempts += 1
         if attempts == 1:
-            return httpx.Response(503)
+            return httpx.Response(status_code)
         return httpx.Response(200, text="ok")
 
     async def fake_sleep(delay: float) -> None:
@@ -52,4 +53,3 @@ def test_non_retryable_page_status_fails_immediately() -> None:
 
     asyncio.run(scenario())
     assert attempts == 1
-

@@ -108,7 +108,7 @@ class AudioDownloader:
             timeout=httpx.Timeout(timeout, connect=30.0),
             headers={
                 "User-Agent": (
-                    "azurlane-bwiki-voice-downloader/1.0 "
+                    "azurlane-bwiki-voice-downloader/2.0 "
                     "(local archival tool; conservative concurrency)"
                 )
             },

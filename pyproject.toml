@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "azurlane-bwiki-voice-downloader"
-version = "1.0.0"
+version = "2.0.0"
 description = "碧蓝航线 BWiki 舰船语音批量下载与结构化归档工具"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -23,4 +23,3 @@ addopts = "-ra"
 
 [tool.setuptools]
 packages = ["bwiki", "downloader", "storage", "utils"]
-

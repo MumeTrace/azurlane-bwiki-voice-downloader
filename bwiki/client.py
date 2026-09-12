@@ -12,7 +12,7 @@ from utils.retry import RETRYABLE_HTTP_STATUS, exponential_delay, retry_after_se
 
 
 DEFAULT_USER_AGENT = (
-    "azurlane-bwiki-voice-downloader/1.0 "
+    "azurlane-bwiki-voice-downloader/2.0 "
     "(local archival tool; conservative concurrency)"
 )
 
