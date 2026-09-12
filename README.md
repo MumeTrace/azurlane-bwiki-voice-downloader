@@ -96,3 +96,7 @@ D:\anaconda3\python.exe inspect_bwiki_dom.py --save-fixture tests\fixtures\lates
 ## 网络与使用边界
 
 本工具只面向公开 Wiki 页面和公开语音资源的本地归档，不包含登录绕过、验证码绕过、代理池或限流规避。全站下载会消耗较多时间、带宽和磁盘空间；请使用默认保守并发，并遵守站点规则及资源权利人的要求。
+
+## License
+
+本项目原创源码和文档采用 [MIT License](LICENSE) 发布。该许可证不改变 BWiki 页面、游戏素材和语音资源各自原有的版权与使用条件。
